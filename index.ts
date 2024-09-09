@@ -1,12 +1,17 @@
 import PptxGenJS from 'pptxgenjs';
 import pptxgen from 'pptxgenjs';
 import { genContentSlide, genThanksSlide, genTitleSlide } from './pptx/demo_master.js';
-import { TOORNAMENT_IDS } from './consts';
+import { TOORNAMENT_TEAM_IDS } from './consts';
 import { scrapeTeamId } from './scraper';
 import { createMasterSlides } from './pptx/createTemplate.js';
 
 const main = async () => {
   console.log('start');
+
+  if (!TOORNAMENT_TEAM_IDS.length) {
+    throw new Error('Update Toornament team ids in consts :]');
+  }
+
   // STEP 1: Instantiate new PptxGenJS object
   let pptx: PptxGenJS = typeof PptxGenJS !== 'undefined' ? new PptxGenJS() : new pptxgen();
 
@@ -25,7 +30,7 @@ const main = async () => {
   genTitleSlide(pptx);
 
   await Promise.all(
-    TOORNAMENT_IDS.map(async (id) => {
+    TOORNAMENT_TEAM_IDS.map(async (id) => {
       const { teamName, players } = await scrapeTeamId(id);
 
       console.log('--------------------\n');

@@ -1,9 +1,9 @@
 import { JSDOM } from 'jsdom';
-import { CHAMPION_ROLES, ROLE_MAP } from './consts';
+import { CHAMPION_ROLES, ROLE_MAP, TOORNAMENT_ID } from './consts';
 import { Player, sortPlayers } from './utils';
 
 export const scrapeTeamId = async (id: string) => {
-  const url = `https://play.toornament.com/en_US/tournaments/7046801349616238592/participants/${id}/info`;
+  const url = `https://play.toornament.com/en_US/tournaments/${TOORNAMENT_ID}/participants/${id}/info`;
 
   const response = await fetch(url);
   const htmlText = await response.text();
