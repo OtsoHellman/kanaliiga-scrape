@@ -39,3 +39,37 @@ export const getRoles = () => {
     console.log(roles);
   });
 };
+
+export const getImages = () => {
+  fs.readFile('./roles.html', 'utf8', (err, data) => {
+    if (err) {
+      console.error('Error reading the file:', err);
+      return;
+    }
+
+    const {
+      window: { DOMParser },
+    } = new JSDOM();
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(data, 'text/html');
+
+    const trs = doc.querySelectorAll('tr');
+    const images = [...trs].reduce((acc, tr) => {
+      const tds = tr.querySelectorAll('td');
+      if (!tds.length) {
+        return acc;
+      }
+      const championName = tds[0].textContent.trim();
+      const championImage = tds[0].querySelector('img').src;
+      return {
+        ...acc,
+        [championName]: championImage,
+      };
+    }, {});
+
+    console.log(images);
+  });
+};
+
+getImages();

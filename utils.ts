@@ -1,4 +1,9 @@
-export const sortPlayers = (players) => {
+export interface Player {
+  infoString: string;
+  favouriteChampions: string[];
+}
+
+export const sortPlayers = (players: (Player | undefined)[]): (Player | undefined)[] => {
   const ranks = [
     'Iron',
     'Bronze',
@@ -13,8 +18,8 @@ export const sortPlayers = (players) => {
   ];
 
   return [...players].sort((a, b) => {
-    const rankIndexA = ranks.findIndex((rank) => a.includes(rank));
-    const rankIndexB = ranks.findIndex((rank) => b.includes(rank));
+    const rankIndexA = ranks.findIndex((rank) => a?.infoString.includes(rank));
+    const rankIndexB = ranks.findIndex((rank) => b?.infoString.includes(rank));
     return rankIndexB - rankIndexA;
   });
 };

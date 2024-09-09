@@ -34,9 +34,8 @@ export const scrapeTeamId = async (id: string) => {
   );
 
   const sortedPlayers = sortPlayers(players);
-  console.log('--------------------\n');
-  console.log(title);
-  console.log(sortedPlayers.join('\n'));
+
+  return { teamName: title, players: sortedPlayers };
 };
 
 export const scrapeUggPlayer = async (name: string) => {
@@ -53,13 +52,18 @@ export const scrapeUggPlayer = async (name: string) => {
 
   const rank =
     doc.querySelector('.rank-title')?.textContent ||
-    [...doc.querySelectorAll('.historic-rank')].map((el) => el.textContent).join(', ');
+    [...doc.querySelectorAll('.historic-rank')]
+      .map((el) => el.textContent)
+      .slice(0, 3)
+      .join(', ');
 
   const favouriteRoles: { [key: string]: number } = {};
 
-  const favouriteChampions = [...doc.querySelectorAll('.champion-stats')]
+  const favouriteChampions: string[] = [];
+  const favouriteChampionsString = [...doc.querySelectorAll('.champion-stats')]
     .reduce((acc, el) => {
       const championName = el.querySelector('.champion-name').textContent;
+      favouriteChampions.push(championName);
       const championRoles = CHAMPION_ROLES[championName];
       const totalGames = parseInt(el.querySelector('.total-games').textContent.split(' ')[0]);
 
@@ -90,5 +94,8 @@ export const scrapeUggPlayer = async (name: string) => {
     return ` (${roleValue} ${roleGamesPercentage}%)`;
   };
 
-  return `${name}${getRoleString()}: ${rank}. ${favouriteChampions}`;
+  return {
+    infoString: `${name}${getRoleString()}: ${rank}. ${favouriteChampionsString}`,
+    favouriteChampions,
+  };
 };
