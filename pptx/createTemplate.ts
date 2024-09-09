@@ -26,7 +26,7 @@ export function createMasterSlides(pptx) {
       { rect: { x: 0.0, y: 5.7, w: '100%', h: 0.75, fill: { color: 'F1F1F1' } } },
       {
         text: {
-          text: 'Kanaliiga lol Season 5 - Teams report',
+          text: 'Kanaliiga lol Season 6 - Teams report',
           options: {
             x: 0.0,
             y: 5.7,

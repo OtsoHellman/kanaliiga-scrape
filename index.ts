@@ -1,8 +1,8 @@
 import PptxGenJS from 'pptxgenjs';
 import pptxgen from 'pptxgenjs';
 import { genContentSlide, genThanksSlide, genTitleSlide } from './pptx/demo_master.js';
-import { TOORNAMENT_TEAM_IDS } from './consts';
-import { scrapeTeamId } from './scraper';
+import { TOORNAMENT_TEAM_IDS } from './src/consts.js';
+import { scrapeTeamId } from './src/scraper.js';
 import { createMasterSlides } from './pptx/createTemplate.js';
 
 const main = async () => {
@@ -16,7 +16,7 @@ const main = async () => {
   let pptx: PptxGenJS = typeof PptxGenJS !== 'undefined' ? new PptxGenJS() : new pptxgen();
 
   // STEP 2: Set Presentation props (as QA test only - these are not required)
-  pptx.title = 'Kanaliiga lol Season 5';
+  pptx.title = 'Kanaliiga lol Season 6';
   pptx.author = 'Captain Sehteri';
   pptx.company = 'Negevlight Consulting oy';
   pptx.revision = '15';
@@ -43,11 +43,8 @@ const main = async () => {
 
   genThanksSlide(pptx);
 
-  // https://u.gg/lol/profile/euw1/hugojiss/overview
-  // const hugo = await scrapeUggPlayer('hugojiss');
-
   return pptx.writeFile({
-    fileName: 'Kanaliiga lol Season 5',
+    fileName: 'Kanaliiga lol Season 6',
   });
 };
 

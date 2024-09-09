@@ -7,9 +7,9 @@
  * BLD.: 20210401
  */
 
-import { CHAMPION_IMAGES } from '../consts';
+import { CHAMPION_IMAGES } from '../src/consts';
 import { IMAGE_PATHS } from './enums.mjs';
-import { Player } from '../utils';
+import { Player } from '../src/utils';
 
 /**
  * SLIDE 1:
