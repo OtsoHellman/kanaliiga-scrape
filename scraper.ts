@@ -39,7 +39,8 @@ export const scrapeTeamId = async (id: string) => {
 };
 
 export const scrapeUggPlayer = async (name: string): Promise<Player> => {
-  const url = `https://u.gg/lol/profile/euw1/${encodeURIComponent(name)}/overview`;
+  const HARDCODED_SUFFIX = '-EUW'; // TODO implement this properly somehow
+  const url = `https://u.gg/lol/profile/euw1/${encodeURIComponent(name)}${HARDCODED_SUFFIX}/overview`;
   const response = await fetch(url);
   const htmlText = await response.text();
 
