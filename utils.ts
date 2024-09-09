@@ -1,5 +1,6 @@
 export interface Player {
   infoString: string;
+  uggUrl: string;
   favouriteChampions: string[];
 }
 

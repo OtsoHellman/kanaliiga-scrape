@@ -1,6 +1,6 @@
 import { JSDOM } from 'jsdom';
 import { CHAMPION_ROLES, ROLE_MAP } from './consts';
-import { sortPlayers } from './utils';
+import { Player, sortPlayers } from './utils';
 
 export const scrapeTeamId = async (id: string) => {
   const url = `https://play.toornament.com/en_US/tournaments/7046801349616238592/participants/${id}/info`;
@@ -15,14 +15,14 @@ export const scrapeTeamId = async (id: string) => {
   const parser = new DOMParser();
   const doc = parser.parseFromString(htmlText, 'text/html');
 
-  const title = doc.querySelector('.title > div > span').textContent;
+  const title = doc.querySelector('.title > div > span')?.textContent;
 
   const playerElements = doc.querySelectorAll('.summoner_player_id');
 
   const players = await Promise.all(
     [...playerElements].map(async (element) => {
-      const text: string = element.textContent;
-      const match: string[] | null = text.match(/Summoner Name:\s+([\S\s]+)$/);
+      const text = element.textContent;
+      const match = text?.match(/Summoner Name:\s+([\S\s]+)$/);
       if (!match?.length || !(match?.length > 1)) {
         return;
       }
@@ -38,7 +38,7 @@ export const scrapeTeamId = async (id: string) => {
   return { teamName: title, players: sortedPlayers };
 };
 
-export const scrapeUggPlayer = async (name: string) => {
+export const scrapeUggPlayer = async (name: string): Promise<Player> => {
   const url = `https://u.gg/lol/profile/euw1/${encodeURIComponent(name)}/overview`;
   const response = await fetch(url);
   const htmlText = await response.text();
@@ -61,11 +61,14 @@ export const scrapeUggPlayer = async (name: string) => {
 
   const favouriteChampions: string[] = [];
   const favouriteChampionsString = [...doc.querySelectorAll('.champion-stats')]
-    .reduce((acc, el) => {
-      const championName = el.querySelector('.champion-name').textContent;
+    .reduce<string[]>((acc, el) => {
+      const championName = el.querySelector('.champion-name')?.textContent;
+      if (!championName) return acc;
       favouriteChampions.push(championName);
       const championRoles = CHAMPION_ROLES[championName];
-      const totalGames = parseInt(el.querySelector('.total-games').textContent.split(' ')[0]);
+      const totalGamesContent = el.querySelector('.total-games')?.textContent;
+      if (!totalGamesContent) return acc;
+      const totalGames = parseInt(totalGamesContent.split(' ')[0]);
 
       championRoles.forEach((role) => {
         favouriteRoles[role] = favouriteRoles[role] ? favouriteRoles[role] + totalGames : totalGames;
@@ -97,5 +100,6 @@ export const scrapeUggPlayer = async (name: string) => {
   return {
     infoString: `${name}${getRoleString()}: ${rank}. ${favouriteChampionsString}`,
     favouriteChampions,
+    uggUrl: url,
   };
 };

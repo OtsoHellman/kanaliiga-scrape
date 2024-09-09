@@ -7,9 +7,9 @@
  * BLD.: 20210401
  */
 
-import { CHAMPION_IMAGES } from './consts';
+import { CHAMPION_IMAGES } from '../consts';
 import { IMAGE_PATHS } from './enums.mjs';
-import { Player } from './utils';
+import { Player } from '../utils';
 
 /**
  * SLIDE 1:
@@ -41,7 +41,10 @@ export function genContentSlide(pptx, title: string, content: (Player | undefine
   );
   slide.addText(title, { placeholder: 'header' });
   slide.addText(
-    content.map((c) => ({ text: c?.infoString, options: { bullet: true, valign: 'top' } })),
+    content.map((c) => ({
+      text: c?.infoString,
+      options: { bullet: true, valign: 'top', hyperlink: { url: c?.uggUrl } },
+    })),
     {
       placeholder: 'body',
       valign: 'top',

@@ -1,9 +1,9 @@
 import PptxGenJS from 'pptxgenjs';
-import { createMasterSlides } from './asd';
 import pptxgen from 'pptxgenjs';
-import { genContentSlide, genThanksSlide, genTitleSlide } from './demo_master.js';
+import { genContentSlide, genThanksSlide, genTitleSlide } from './pptx/demo_master.js';
 import { TOORNAMENT_IDS } from './consts';
 import { scrapeTeamId } from './scraper';
+import { createMasterSlides } from './pptx/createTemplate.js';
 
 const main = async () => {
   console.log('start');
@@ -31,6 +31,7 @@ const main = async () => {
       console.log('--------------------\n');
       console.log(teamName);
       console.log(players.map((player) => player?.infoString).join('\n'));
+      if (!teamName) return;
       genContentSlide(pptx, teamName, players);
     })
   );
